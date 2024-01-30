@@ -22,9 +22,9 @@
 
 **（2）Signature regulation score of TCM compound combinations;**
 
-**（3）Overall ML prediction based on 4 synergistic measurement;**
+**（3）Overall ML prediction based on 4 synergistic measurements;**
 
-**（4）Validation of synergy effect via  a series of in vitro experiment.**
+**（4）Validation of synergy effect via  a series of in vitro experiments.**
 
 
 
