@@ -1,6 +1,6 @@
 ## 1. The summary diagram of the study
 
-<img src="https://raw.githubusercontent.com/lishensuo/images2/main/img01/image-20240130163358902.png" alt="image-20240130163358902" style="zoom:30%;" />
+<img src="https://raw.githubusercontent.com/lishensuo/images2/main/img01/image-20240131135356339.png" alt="image-20240131135356339" />
 
 ## 2. Main analysis steps in the study
 
@@ -11,6 +11,7 @@
 - 2）RAR proximity of Signature  to breast cancer targets;
 - 3）De-redundancy analysis between signatures;
 - 4）Propose wAC index based on reversal regulation to recognize marker signature.
+
 **（2）machine learning prediction**
 - 1）data collection and cleaning；
 - 2）AutoML model training；
