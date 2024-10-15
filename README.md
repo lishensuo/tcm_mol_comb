@@ -1,33 +1,28 @@
 ## 1. The summary diagram of the study
 
-<img src="https://raw.githubusercontent.com/lishensuo/images2/main/img01/image-20240131135356339.png" alt="image-20240131135356339" />
+![image-20241015083604595](https://raw.githubusercontent.com/lishensuo/images2/main/img01/image-20241015083604595.png)
 
 ## 2. Main analysis steps in the study
 
-#### 2.1 Propose two computational algorithms
+**2.1 Propose computational algorithm based on Complementary signature regulation**
 
-**（1）Complementary signature regulation**
 - 1）TCGA-DEG identification and Over-representation  enrichment analysis;
 - 2）RAR proximity of Signature  to breast cancer targets;
 - 3）De-redundancy analysis between signatures;
 - 4）Propose wAC index based on reversal regulation to recognize marker signature.
 
-**（2）machine learning prediction**
+**2.2 Propose computational algorithm based on Complementary signature regulation**
+
 - 1）data collection and cleaning；
 - 2）AutoML model training；
 - 3）Model comparison and selection.
 
-#### 2.2 Discover TCM compound combination
+**2.3 Discover TCM compound combination**
 
-**（1）Signature regulation score of single TCM compounds;**
-
-**（2）Signature regulation score of TCM compound combinations;**
-
-**（3）Overall ML prediction based on 4 synergistic measurements;**
-
-**（4）Validation of synergy effect via  a series of in vitro experiments.**
-
-
+- 1）Signature regulation score of single TCM compound；
+- 2）Signature regulation score of TCM compound combinations；
+- 3）Overall ML prediction based on ZIP synergistic measurements；
+- 4）Validation of synergy effect via  a series of in vitro experiments
 
  
 

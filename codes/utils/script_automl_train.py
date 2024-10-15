@@ -5,50 +5,53 @@ import pandas as pd
 import numpy as np
 from autogluon.tabular import TabularDataset, TabularPredictor
 
-
 mode = "medium_quality"
-metricses = ['ZIP','HSA','Loewe','Bliss']
-fp_types = ["AtomPairs2D","CDK","CDKextended","CDKgraphonly","EState","KlekotaRoth","MACCS","PubChem","Substructure"]
-gene_ranks = [100,300,500]
+metricses = ["ZIP","HSA","Loewe","Bliss"]
 
+fp_types = ["MACCS","PubChem","Substructure"]
+# gene_rank = [958]
+# metrics = metricses[0]
+# fp_type = fp_types[0]
+
+res_test_list = []
 
 for metrics in metricses:
-	for fp_type in fp_types:
-		for gene_rank in gene_ranks:
-			data_kfold = pd.read_csv("data_fold/"+metrics+".csv")
-			fl = "data_fold/"+metrics+"_"+fp_type+"_"+str(gene_rank)+"_raw.csv"
-			zuhe_raw = pd.read_csv(fl)
-			zuhe_raw = zuhe_raw.drop(["CID.A","CID.B","DepMap_ID"],axis=1)
-			test_res_kfold = []
-			for k in range(10):
-				print(k)
-				# k = 0
-				sle_kfold = pd.DataFrame(data_kfold.iloc[:,k])
-				sle_kfold.columns=["Set"]
-				zuhe_dat = pd.concat([sle_kfold,zuhe_raw],axis=1)
+    dat_train = pd.read_csv("./ML/data/test_bc/train_dat_"+metrics+"_Pan.csv")
 
-				zuhe_train = zuhe_dat.loc[zuhe_dat.Set==0,:].drop(["Set"], axis=1).reset_index(drop=True)
-				zuhe_test = zuhe_dat.loc[zuhe_dat.Set!=0,:].drop(["Set"], axis=1).reset_index(drop=True)
-				zuhe_test.shape
+    for fp_type in fp_types:
+        print("################## Start ", metrics, "————", fp_type)
+        selected_columns = [col for col in dat_train.columns if col.startswith(('Exp','Desc',fp_type))]
+        # selected_columns = [col for col in dat_train.columns if col.startswith(fp_type)]
+        selected_columns = ['set','label'] + selected_columns
 
-				zuhe_train_Tab = TabularDataset(zuhe_train)
-				zuhe_test_Tab = TabularDataset(zuhe_test)
+        dat_train_fp = dat_train[selected_columns]
 
-				save_path = "model_fold/" + metrics + "_"+ mode + "/" + fp_type + "_" + str(gene_rank) + "_f" + str(k)
+        dat_cv = dat_train_fp.loc[dat_train_fp.set=='train',:].drop(["set"], axis=1)
+        dat_test = dat_train_fp.loc[dat_train_fp.set!='train',:].drop(["set"], axis=1)
 
-				metric = "accuracy"
-				eval_metric = ["roc_auc","average_precision","precision","recall","f1"]
-				predictor = TabularPredictor(label="label", path=save_path, 
-					verbosity=1).fit(zuhe_train_Tab,presets=mode, excluded_model_types = [""])
+        dat_cv_Tab = TabularDataset(dat_cv)
+        dat_test_Tab = TabularDataset(dat_test)
 
-				test_res = predictor.leaderboard(zuhe_test_Tab, extra_metrics = eval_metric,silent=True)
-				test_res = test_res.iloc[:,0:8]
-				test_res["fold"] = k
-				test_res_kfold.append(test_res)
-				# time.sleep(5)
+        save_path = "./ML/data/test_bc/model08/" + metrics + "_"+ mode + "/" + fp_type
+ 
+        metric = "root_mean_squared_error"
+        eval_metric = ["r2"]	
 
-			test_res_df = pd.concat(test_res_kfold, axis=0)
-			file_name = "model_fold/eval/"+metrics+"_" + fp_type + "_" + str(gene_rank) + "_kfold.csv"
-			test_res_df.to_csv(file_name, index=False)
+        predictor = TabularPredictor(label="label", path=save_path, 
+            verbosity=1).fit(dat_cv_Tab,presets=mode, 
+                                ag_args_fit={'num_gpus': 2})
+        
+        predictor.leaderboard()
+        res_test = predictor.leaderboard(dat_test_Tab, extra_metrics = eval_metric,silent=True)
+        eval_columns = ['model'] + ['score_val','score_test'] + eval_metric
+        res_test = res_test.loc[:,eval_columns]
+        res_test['Metrics'] = metrics
+        res_test['FP'] = fp_type
 
+        res_test_list.append(res_test)
 
+res_test_df = pd.concat(res_test_list, axis=0)
+
+file_name_2 = "./ML/data/test_bc/model08/Model_test_result.csv"
+
+res_test_df.to_csv(file_name_2, index=False)

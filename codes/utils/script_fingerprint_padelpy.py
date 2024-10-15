@@ -9,21 +9,12 @@ def get_padel_fp(cid, smile):
 
     dir_fp = "data/middle/fp_padel/" + cid
     tmp_smi = "data/middle/tmp_" + cid + ".smi"
-    FP_list = ['AtomPairs2DCount', # 781 +
-         'AtomPairs2D', # 781
-         'EState', #80 *
-         'CDKextended', #1025 *
-         'CDK', #1025 *
-         'CDKgraphonly', #1025 *
-         'KlekotaRothCount', #4861 * +
-         'KlekotaRoth', #4861 * +
+    FP_list = [
          'MACCS', #167
          'PubChem', #882
-         'SubstructureCount', #308 +
          'Substructure'] #308
 
     if not os.path.exists(dir_fp):
-    # if len(os.listdir(dir_fp)) != 12:
         os.makedirs(dir_fp,exist_ok=True)
 
         with open(tmp_smi, "w") as f:
