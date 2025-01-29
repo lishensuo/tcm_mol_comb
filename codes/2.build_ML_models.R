@@ -5,10 +5,15 @@ library(parallel)
 fp_types=gsub(".csv","",list.files("ML/data/raw/fp_comb/10114/"))
 fp_types=grep("Count",fp_types, value=T,invert=T)
 fp_types
+# [1] "AtomPairs2D"  "CDK"          "CDKextended"  "CDKgraphonly" "EState"
+# [6] "KlekotaRoth"  "MACCS"        "PubChem"      "Substructure"
+
+
+
 
 # BC cell line exp
 assays2 = read.csv("ML/data/middle/comb_df_pan.csv")
-# assays2 = subset(assays2, Cellosaurus.ID!='CVCL_0031') #MCF7
+assays2 = subset(assays2, Cellosaurus.ID=='CVCL_0031') #MCF7
 
 
 # Regression
@@ -123,9 +128,15 @@ get_feat_data = function(data_sub, fp_sle = NULL, CL_ID = NULL){
 
 
 
-set.seed(123)
-CL_IDs = sample(setdiff(colnames(ccle_exp),'CVCL_0031'),9)
-CL_IDs = c(CL_IDs, "CVCL_0031")
+# set.seed(123)
+# CL_IDs = sample(setdiff(colnames(ccle_exp),'CVCL_0031'),9)
+# CL_IDs = c(CL_IDs, "CVCL_0031")
+
+
+CL_IDs = "CVCL_0031"
+CL_ID = "CVCL_0031"
+
+
 
 
 for (metrics_sle in c("ZIP","HSA","Loewe","Bliss")){
@@ -151,6 +162,15 @@ for (metrics_sle in c("ZIP","HSA","Loewe","Bliss")){
     write.csv(data_final, row.names = FALSE,
                 file = paste0("./ML/data/test_bc/train_dat_",metrics_sle,"_Pan_MCF7.csv"))
 }
+
+
+data_final_2 = read.csv(paste0("./ML/data/test_bc/train_dat_",metrics_sle,"_Pan_MCF7.csv"))
+dim(data_final_2)
+
+
+data_final[1:4, 1:4]
+
+data_final_2[1:4, 1:4]
 
 
 
